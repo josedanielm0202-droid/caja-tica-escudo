@@ -51,3 +51,5 @@ Ver `config.ts`. writz-lend `CCMSOCBV…6ZZK`, bitcoin-spv `CAHHY4S4…MCLP`, US
 4. `npm run prestar-pagar -- 5 1` y `npm run leer`.
 
 **Plan B:** si `deposit` falla, abrir la posición en https://testnet.writz.xyz y poner su txid en `LOAN_TXID`; todo lo demás funciona igual (lecturas por txid).
+
+Transacciones reales del demo: ver [docs/transacciones.md](../docs/transacciones.md).
