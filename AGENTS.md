@@ -21,19 +21,19 @@ Comercios y ahorristas en Costa Rica que tienen BTC lo dejan en una bóveda de W
 
 ## Roles (asignados al azar)
 
-### Josué: Contratos y Writz (`/contracts`, `/writz`)
+### José: Contratos y Writz (`/contracts`, `/writz`)
 Conectar la app con Writz en testnet (depositar, pedir prestado, pagar, leer salud), escribir las pruebas y configurar CI (GitHub Actions). Responsable del plan B.
 Primeras tareas: 1) script que lea `get_position` y `get_health_ratio_bp` de una cuenta; 2) flujo `borrow` y `repay`; 3) mínimo 8 pruebas + CI en verde.
 
 ### Juliana: App y pantallas (`/web`)
 Web responsive (funciona en celular) según el boceto: inicio, conectar billetera (Freighter/Passport), panel con medidor verde/amarillo/rojo, pedir préstamo con slider de LTV y precio de liquidación, planilla/retiro a colones simulado, historial con enlaces a Stellar Expert y feed en vivo.
-Primeras tareas: 1) crear el proyecto web y el diseño base; 2) conexión de billetera; 3) panel con datos de ejemplo, luego conectarlo a lo de Josué.
+Primeras tareas: 1) crear el proyecto web y el diseño base; 2) conexión de billetera; 3) panel con datos de ejemplo, luego conectarlo a lo de José.
 
 ### Raúl: Escudo y alertas (`/escudo`)
 Bot que vigila la salud del préstamo, alertas por Telegram, abono automático desde la reserva USDC con `repay`, y botón/endpoint "Simular caída". Extra si sobra tiempo: consulta de riesgo pagada por uso con x402.
 Primeras tareas: 1) bot de Telegram que mande un mensaje de prueba; 2) revisar la salud cada X segundos y alertar por umbrales; 3) abono automático + simulación de caída.
 
-### José: Producto, pitch y entrega (`/docs`, README)
+### Josué: Producto, pitch y entrega (`/docs`, README)
 README con lista "Qué cumple", diagrama de transacciones, evidencia del problema y nota legal; pitch de 3 min y demo de 2 min; subir el proyecto a APEX antes del mediodía del lunes. Coordina que todo se integre.
 Primeras tareas: 1) README con estructura y checklist; 2) guion del pitch y del demo; 3) crear el proyecto en APEX e invitar al equipo.
 
