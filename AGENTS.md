@@ -37,6 +37,14 @@ Primeras tareas: 1) bot de Telegram que mande un mensaje de prueba; 2) revisar l
 README con lista "Qué cumple", diagrama de transacciones, evidencia del problema y nota legal; pitch de 3 min y demo de 2 min; subir el proyecto a APEX antes del mediodía del lunes. Coordina que todo se integre.
 Primeras tareas: 1) README con estructura y checklist; 2) guion del pitch y del demo; 3) crear el proyecto en APEX e invitar al equipo.
 
+## Partes compartidas (dueño: José)
+- Formato de datos del módulo Writz: qué devuelve cada función y en qué unidades (USDC con 7 decimales). Documentado en `/writz/README.md`.
+- Integración: que la web, el Escudo y Writz funcionen como una sola app.
+- Cuentas y llaves compartidas: cuenta del demo y cuenta de reserva USDC del Escudo (nunca en la repo).
+- Revisar y unir pull requests a `main`.
+- Coordinar la prueba completa del domingo en la noche.
+- Publicar la app NO es de José: la web la publica Juliana (Vercel o GitHub Pages) y el bot lo publica Raúl (Render o Railway).
+
 ## Reglas para todos
 - Nunca subir llaves privadas, semillas ni archivos `.env` (usar `.env.example`).
 - Cada transacción del demo debe tener su enlace a Stellar Expert.
