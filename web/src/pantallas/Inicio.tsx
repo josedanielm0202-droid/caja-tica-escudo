@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useBilletera } from "../billetera/useBilletera";
 import { useTitulo } from "../lib/titulo";
 
 const PASOS = [
@@ -30,6 +31,8 @@ const PASOS = [
 
 export function Inicio() {
   useTitulo("Inicio");
+  const billetera = useBilletera();
+  const ocupado = billetera.fase === "revisando" || billetera.fase === "conectando";
   return (
     <div className="pagina">
       <p className="kicker">Préstamo con garantía · Stellar testnet</p>
@@ -38,7 +41,18 @@ export function Inicio() {
         Si tenés BTC y ocupás pagar planilla, lo dejás en una bóveda y pedís USDC. No hace falta venderlo.
       </p>
       <div className="acciones">
-        <Link className="boton" to="/panel">
+        {billetera.conectada ? null : (
+          <button
+            type="button"
+            className="boton"
+            onClick={() => void billetera.conectar()}
+            disabled={ocupado}
+            aria-busy={ocupado || undefined}
+          >
+            {billetera.fase === "conectando" ? "Conectando…" : "Conectar billetera"}
+          </button>
+        )}
+        <Link className={billetera.conectada ? "boton" : "boton boton--secundario"} to="/panel">
           Mirá el panel
         </Link>
         <Link className="boton boton--secundario" to="/prestamo">

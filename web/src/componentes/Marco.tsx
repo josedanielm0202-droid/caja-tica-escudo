@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { BotonBilletera, EstadoBilletera } from "./BilleteraUi";
 import { Fondo } from "./Fondo";
 import { PieLegal } from "./PieLegal";
 
@@ -32,9 +33,13 @@ export function Marco() {
             </NavLink>
           ))}
         </nav>
-        <span className="pastilla">Testnet</span>
+        <div className="barra-fin">
+          <BotonBilletera />
+          <span className="pastilla">Testnet</span>
+        </div>
       </header>
       <main id="contenido" className="contenido">
+        <EstadoBilletera />
         <Outlet />
       </main>
       <PieLegal />

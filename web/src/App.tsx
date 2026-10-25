@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BilleteraProvider } from "./billetera/BilleteraContext";
 import { Marco } from "./componentes/Marco";
 import { Historial } from "./pantallas/Historial";
 import { Inicio } from "./pantallas/Inicio";
@@ -15,16 +16,18 @@ function basename(): string | undefined {
 export function App() {
   return (
     <BrowserRouter basename={basename()}>
-      <Routes>
-        <Route element={<Marco />}>
-          <Route index element={<Inicio />} />
-          <Route path="panel" element={<Panel />} />
-          <Route path="prestamo" element={<PedirPrestamo />} />
-          <Route path="planilla" element={<Planilla />} />
-          <Route path="historial" element={<Historial />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
+      <BilleteraProvider>
+        <Routes>
+          <Route element={<Marco />}>
+            <Route index element={<Inicio />} />
+            <Route path="panel" element={<Panel />} />
+            <Route path="prestamo" element={<PedirPrestamo />} />
+            <Route path="planilla" element={<Planilla />} />
+            <Route path="historial" element={<Historial />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </BilleteraProvider>
     </BrowserRouter>
   );
 }

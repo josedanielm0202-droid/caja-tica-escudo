@@ -46,7 +46,11 @@ La web no llama contratos directo. Importa `../writz` (`units.ts`, `config.ts` y
 - Salud: basis points (`15000` = 150 %). `null` = sin deuda.
 - Semáforo (`semaforo` en `writz/units.ts`): verde ≥ 150 %, amarillo 125–150 %, rojo &lt; 125 %. Bajo 120 % hay riesgo de liquidación.
 
-Los números del panel son un ejemplo. La billetera (Freighter, `Firmante` con `publicKey` y `firmar`) es el siguiente paso.
+Los números del panel son un ejemplo. La billetera es Freighter: el botón «Conectar billetera» pide la cuenta pública y, si Freighter ya autorizó el sitio, al recargar se vuelve a leer con `getAddress`. No se guarda la llave en el navegador. El firmante solo existe en testnet (`WRITZ.networkPassphrase`) y llama a `signTransaction` de `@stellar/freighter-api`. El saldo usa `saldoUsdc` de `writz/client.ts`.
+
+Otra billetera puede implementar `PasaporteBilletera` en `src/billetera/tipos.ts`. Hoy solo está Freighter.
+
+En `vite dev`, `?demo-billetera=conectada` y `?demo-billetera=otra-red` muestran estados de ejemplo. Ese módulo no entra en el build de producción.
 
 ### Buffer y `@stellar/stellar-sdk`
 

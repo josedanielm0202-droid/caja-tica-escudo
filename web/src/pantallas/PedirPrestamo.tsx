@@ -10,6 +10,7 @@ import {
   deudaDesdeLtv,
   saludDesdeDeuda,
 } from "../datos/ejemplo";
+import { useBilletera } from "../billetera/useBilletera";
 import { textoBtc, textoLtv, textoUsd, textoUsdc } from "../lib/formato";
 import { useTitulo } from "../lib/titulo";
 
@@ -21,6 +22,7 @@ export function PedirPrestamo() {
   const ltvReal = ltvBp(COLATERAL, deuda);
   const tope = maximoPrestable(COLATERAL, 0n);
   const sobreLimite = ltvReal > TOPE_LTV_BP;
+  const billetera = useBilletera();
 
   return (
     <div className="pagina">
@@ -76,9 +78,20 @@ export function PedirPrestamo() {
           <dd>{(BP / 100).toLocaleString("es-CR")} % = salud igual al colateral</dd>
         </div>
       </dl>
-      <button type="button" className="boton" disabled>
-        Conectar billetera (siguiente paso)
-      </button>
+      {billetera.firmante ? (
+        <button type="button" className="boton" disabled>
+          Pedir prestado queda para cuando haya un depósito
+        </button>
+      ) : billetera.conectada ? null : (
+        <button
+          type="button"
+          className="boton"
+          onClick={() => void billetera.conectar()}
+          disabled={billetera.fase === "revisando" || billetera.fase === "conectando"}
+        >
+          {billetera.fase === "conectando" ? "Conectando…" : "Conectar billetera"}
+        </button>
+      )}
     </div>
   );
 }

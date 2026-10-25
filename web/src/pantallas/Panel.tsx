@@ -21,8 +21,8 @@ export function Panel() {
     <div className="pagina">
       <h1>Panel</h1>
       <p className="aviso">
-        Datos de ejemplo, armados con las reglas de <code>writz/units.ts</code>. Todavía no están
-        conectados a tu billetera ni a la red de prueba.
+        Datos de ejemplo, armados con las reglas de <code>writz/units.ts</code>. No son el préstamo de
+        tu cuenta: el saldo USDC de arriba, si aparece, sí es el de la billetera.
       </p>
       <fieldset className="chips">
         <legend>Elegí un ejemplo</legend>

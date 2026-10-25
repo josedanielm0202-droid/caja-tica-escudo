@@ -161,6 +161,7 @@ code { font-size: 0.92em; }
 .barra {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.75rem;
   min-height: 52px;
   margin: 10px 12px 0;
@@ -177,8 +178,35 @@ code { font-size: 0.92em; }
   gap: 0.55rem;
   color: inherit;
   text-decoration: none;
-  margin-right: auto;
+  min-width: 0;
 }
+
+.barra-fin {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.boton--chico {
+  min-height: 44px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.clave {
+  color: var(--oro);
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.estado-billetera { display: grid; gap: 0.7rem; }
+.estado-billetera:empty { display: none; }
 
 .marca strong { display: block; font-size: 1.05rem; letter-spacing: -0.02em; }
 .marca small { display: block; color: var(--suave); font-size: 0.78rem; }
@@ -518,6 +546,7 @@ input[type="range"] { width: 100%; accent-color: var(--oro); }
     min-height: 64px;
     padding: 0 16px 0 18px;
   }
+  .barra-fin { margin-left: 0; }
   .marca { margin-right: 0; font-size: 1.05rem; }
   .nav-escritorio {
     display: flex;
