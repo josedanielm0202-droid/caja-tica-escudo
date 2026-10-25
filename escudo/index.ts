@@ -5,6 +5,7 @@ import { crearTelegram } from "./telegram.js";
 import { leerConfig } from "./config.js";
 import { escuchar } from "./bot.js";
 import { intervaloS, vigilar } from "./vigilante.js";
+import { crearServidorSalud, iniciarKeepAlive, keepAliveS, puertoSalud, urlKeepAlive } from "./salud.js";
 import { abonoAutoActivo, crearAbonador, enfriamientoS } from "./abono.js";
 
 const cfg = leerConfig();
@@ -16,6 +17,13 @@ const alLeer = crearAbonador({
   leerPrestamo, saldoUsdc, pagar,
 });
 console.log(`Escudo: revisando cada ${intervaloS()} s, abono automático ${auto ? "ENCENDIDO" : "apagado"}.`);
+const puerto = puertoSalud();
+if (puerto) crearServidorSalud().listen(puerto, () => console.log(`Escudo: salud en http://localhost:${puerto}/salud`));
+const urlVivo = urlKeepAlive();
+if (urlVivo) {
+  iniciarKeepAlive({ url: urlVivo, cadaMs: keepAliveS() * 1000 });
+  console.log(`Escudo: keep-alive a ${urlVivo}/salud cada ${keepAliveS()} s.`);
+}
 await Promise.all([
   escuchar({ telegram, leerPrestamo, txid: cfg.txid, chatId: cfg.chatId, abonoAuto: auto }),
   vigilar({ telegram, salud, txid: cfg.txid, chatId: cfg.chatId, alLeer: async (n, h) => { await alLeer(n, h); } }),

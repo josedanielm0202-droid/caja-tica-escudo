@@ -69,7 +69,7 @@ npm run escudo:riesgo   # escucha en http://localhost:4020
 `precioLiquidacionUsdc` es el precio del BTC (USDC por 1 BTC) al que se liquidaría (`precioLiquidacion`). Si el préstamo no existe responde 404 y **no cobra**. Un cliente de prueba se puede hacer con `@x402/fetch` + `@x402/stellar/exact/client`.
 
 ## Publicarlo (después)
-Para que corra siempre, se puede subir a **Render** o **Railway** como "worker" (no necesita puerto) con el comando `npm run escudo` y las variables de arriba en su panel. Solo una copia del bot a la vez (si no, Telegram da error 409 en `getUpdates`).
+Para que corra siempre, se puede subir a **Render gratis** como servicio web con el comando `npm run escudo` y las variables de arriba en su panel. Si hay `PORT`, el bot abre `GET /salud` (responde `ok`), y con `RENDER_EXTERNAL_URL` o `ESCUDO_KEEPALIVE_URL` se hace ping solo cada `ESCUDO_KEEPALIVE_S` segundos (600 por defecto) para que Render no lo duerma. El plan gratis igual puede reiniciar de vez en cuando. Solo una copia del bot a la vez (si no, Telegram da error 409 en `getUpdates`).
 Guía paso a paso: [DESPLIEGUE.md](DESPLIEGUE.md) (blueprint en `escudo/render.yaml`).
 
 ## Pruebas

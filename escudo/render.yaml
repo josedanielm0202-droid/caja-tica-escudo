@@ -1,13 +1,15 @@
 # Blueprint de Render para el Escudo (bot de Telegram + vigilante + abono automático).
+# Es un servicio web gratis: abre GET /salud en el PORT de Render y se hace ping solo (keep-alive).
 # Está en /escudo porque esa es la carpeta de Raúl. En Render: New > Blueprint y en
 # "Blueprint Path" poné escudo/render.yaml.
 # Las variables van con sync: false: Render las pide en el panel y nunca quedan en la repo.
 services:
-  - type: worker
+  - type: web
     name: escudo-caja-tica
     runtime: node
-    plan: starter
+    plan: free
     numInstances: 1 # solo una copia: dos bots dan error 409 en getUpdates de Telegram
+    healthCheckPath: /salud
     buildCommand: npm ci
     startCommand: npm run escudo
     autoDeploy: false
