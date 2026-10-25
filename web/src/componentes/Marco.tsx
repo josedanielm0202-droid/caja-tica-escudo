@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { Fondo } from "./Fondo";
 import { PieLegal } from "./PieLegal";
 
 const ENLACES = [
@@ -12,10 +13,11 @@ const ENLACES = [
 export function Marco() {
   return (
     <div className="cuerpo">
+      <Fondo />
       <a className="saltar" href="#contenido">
         Saltar al contenido
       </a>
-      <header className="barra">
+      <header className="barra vidrio">
         <NavLink to="/" className="marca" end>
           <Escudo />
           <span>
@@ -36,7 +38,7 @@ export function Marco() {
         <Outlet />
       </main>
       <PieLegal />
-      <nav className="nav-movil" aria-label="Principal">
+      <nav className="nav-movil vidrio" aria-label="Principal">
         {ENLACES.map((enlace) => (
           <NavLink key={enlace.to} to={enlace.to} end={enlace.fin}>
             <enlace.icono />
