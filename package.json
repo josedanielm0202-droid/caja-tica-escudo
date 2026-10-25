@@ -9,7 +9,9 @@
     "leer": "tsx scripts/leer.ts",
     "boveda": "tsx scripts/boveda.ts",
     "depositar": "tsx scripts/depositar.ts",
-    "prestar-pagar": "tsx scripts/prestar-pagar.ts"
+    "prestar-pagar": "tsx scripts/prestar-pagar.ts",
+    "escudo": "tsx escudo/index.ts",
+    "escudo:prueba": "tsx escudo/prueba.ts"
   },
   "repository": {
     "type": "git",
