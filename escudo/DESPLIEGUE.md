@@ -10,7 +10,7 @@ Guía corta para dejar el bot corriendo siempre. Es una demo en testnet: no es u
 
 ## Pasos en Render
 1. En Render: **New > Blueprint**, elegí esta repo y en **Blueprint Path** poné `escudo/render.yaml`.
-2. Render crea un **Background Worker** (no necesita puerto) que corre `npm ci` y luego `npm run escudo`.
+2. Render crea un **Web Service gratis** (`plan: free`) que corre `npm ci` y luego `npm run escudo`. El bot abre `GET /salud` en el `PORT` que da Render (responde `ok`) y Render lo usa como health check.
 3. Render te pide las variables (están con `sync: false`, sin valores en la repo). Pegá los valores de arriba.
 4. Para que abone solo, poné `ESCUDO_ABONO_AUTO=on` (exactamente `on`). Cualquier otra cosa = solo avisa.
 5. `ESCUDO_INTERVALO_S` y `ESCUDO_ENFRIAMIENTO_S` se pueden dejar vacías (30 y 600 segundos).
@@ -20,4 +20,7 @@ Guía corta para dejar el bot corriendo siempre. Es una demo en testnet: no es u
 ## Importante
 - **Solo una instancia.** El blueprint ya tiene `numInstances: 1`. No lo corrás a la vez en tu compu y en Render: Telegram da error 409 en `getUpdates`.
 - Nunca subás `.env` ni llaves a la repo.
-- El worker de Render es de pago (plan starter). Si se usa otro plan o Railway, el comando es el mismo: `npm run escudo`.
+- **Plan gratis y keep-alive.** El plan gratis duerme el servicio si no recibe visitas en unos 15 minutos. Para evitarlo, el bot se hace ping solo a `${RENDER_EXTERNAL_URL}/salud` cada `ESCUDO_KEEPALIVE_S` segundos (600 por defecto). Render pone `RENDER_EXTERNAL_URL` solo; se puede cambiar con `ESCUDO_KEEPALIVE_URL`. Si el ping falla, solo queda en los logs.
+- **Ojo:** aun así el plan gratis puede reiniciar el servicio de vez en cuando (deploys, mantenimiento o límite de horas del mes). El bot vuelve a arrancar solo, pero puede haber unos minutos sin vigilancia.
+- En tu compu no pasa nada nuevo: sin `PORT` no abre servidor y sin URL no hace keep-alive. No pongás `PORT` si también corrés `npm run escudo:riesgo` (ese usa `X402_PUERTO`); o usá `ESCUDO_PUERTO` para el Escudo.
+- En Railway u otro lado el comando es el mismo: `npm run escudo`.
