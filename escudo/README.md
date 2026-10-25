@@ -45,6 +45,7 @@ Si la salud baja de **125 %** (rojo), el Escudo calcula cuánto abonar para volv
 
 ## Publicarlo (después)
 Para que corra siempre, se puede subir a **Render** o **Railway** como "worker" (no necesita puerto) con el comando `npm run escudo` y las variables de arriba en su panel. Solo una copia del bot a la vez (si no, Telegram da error 409 en `getUpdates`).
+Guía paso a paso: [DESPLIEGUE.md](DESPLIEGUE.md) (blueprint en `escudo/render.yaml`).
 
 ## Pruebas
 `npm test` corre las pruebas en `tests/escudo-*.test.ts` sin red (Telegram y Writz simulados).
