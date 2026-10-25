@@ -16,6 +16,7 @@ El Escudo es un bot de Telegram que cuida tu préstamo de Writz. Te dice cómo e
 | `TELEGRAM_BOT_TOKEN` | Token de @BotFather |
 | `TELEGRAM_CHAT_ID` | Chat donde el bot responde y manda alertas |
 | `LOAN_TXID` | txid (orden interno) del préstamo a vigilar |
+| `ESCUDO_INTERVALO_S` | Cada cuántos segundos revisar la salud (vacío = 30) |
 
 Copiá `.env.example` a `.env` y llenalas.
 
@@ -26,6 +27,12 @@ npm run escudo:prueba   # manda un mensaje de prueba
 npm run escudo          # arranca el bot
 ```
 Comandos en Telegram: `/start`, `/estado`.
+
+## Vigilante de salud
+Mientras corre, el Escudo revisa la salud cada `ESCUDO_INTERVALO_S` segundos y avisa **solo cuando cambia el nivel** (no en cada revisión):
+- 🟡 baja de 150 % → amarillo
+- 🔴 baja de 125 % → rojo (se liquida en 120 %)
+- 🟢 vuelve a 150 % o más → recuperado
 
 ## Publicarlo (después)
 Para que corra siempre, se puede subir a **Render** o **Railway** como "worker" (no necesita puerto) con el comando `npm run escudo` y las variables de arriba en su panel. Solo una copia del bot a la vez (si no, Telegram da error 409 en `getUpdates`).
