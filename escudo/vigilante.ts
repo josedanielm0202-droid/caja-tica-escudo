@@ -1,4 +1,5 @@
 // Vigilante de salud: revisa la salud cada N segundos y alerta solo cuando cambia el nivel.
+import { leerUmbrales } from "./config.js";
 import { semaforo, type Semaforo } from "../writz/units.js";
 import type { Telegram } from "./telegram.js";
 import { EMOJI, porcentaje } from "./mensajes.js";
@@ -9,10 +10,10 @@ const ORDEN: Record<Semaforo, number> = { verde: 0, amarillo: 1, rojo: 2 };
 
 /**
  * Función pura: dado el nivel anterior (null = primera lectura) y la salud nueva,
- * dice el nivel nuevo y si hay que alertar. Umbrales: 150 % amarillo, 125 % rojo.
+ * dice el nivel nuevo y si hay que alertar. Umbrales: ESCUDO_UMBRAL_AMARILLO_BP / ESCUDO_UMBRAL_ROJO_BP (150 % / 125 % por defecto).
  */
 export function transicion(anterior: Semaforo | null, saludBp: number | null): Transicion {
-  const nivel = semaforo(saludBp);
+  const nivel = semaforo(saludBp, leerUmbrales());
   const pct = porcentaje(saludBp);
   if (anterior === null) {
     // Primera lectura: solo avisa si ya arranca mal.

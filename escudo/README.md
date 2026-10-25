@@ -19,6 +19,8 @@ El Escudo es un bot de Telegram que cuida tu préstamo de Writz. Te dice cómo e
 | `ESCUDO_INTERVALO_S` | Cada cuántos segundos revisar la salud (vacío = 30) |
 | `ESCUDO_ABONO_AUTO` | Escribí exactamente `on` para que abone solo. Cualquier otra cosa = solo avisa |
 | `ESCUDO_ENFRIAMIENTO_S` | Segundos mínimos entre dos abonos automáticos (vacío = 600) |
+| `ESCUDO_UMBRAL_ROJO_BP` | Umbral rojo en bp (entero 10000–50000; vacío o inválido = 12500, o sea 125 %). Para la demo en testnet: `45000` |
+| `ESCUDO_UMBRAL_AMARILLO_BP` | Umbral amarillo en bp (entero 10000–60000; vacío = 15000). Siempre queda por encima del rojo (si no, rojo + 2500). El abono lleva la salud hasta este valor (mínimo 150 %) |
 | `RESERVA_PUBLIC` / `RESERVA_SECRET` | Cuenta de reserva USDC del Escudo (la da José, nunca en la repo) |
 | `X402_PAY_TO` | Cuenta G... que recibe los pagos de la consulta de riesgo (solo para `escudo:riesgo`) |
 | `X402_PRECIO` | Precio por consulta en USDC (vacío = `$0.01`) |
@@ -42,7 +44,7 @@ Mientras corre, el Escudo revisa la salud cada `ESCUDO_INTERVALO_S` segundos y a
 - 🟢 vuelve a 150 % o más → recuperado
 
 ## Abono automático
-Si la salud baja de **125 %** (rojo), el Escudo calcula cuánto abonar para volver a **150 %** (`abonoParaSalud`), revisa que la reserva tenga ese USDC (`saldoUsdc`) y paga con `pagar` firmando con la reserva. Te manda el enlace de Stellar Expert. Después espera `ESCUDO_ENFRIAMIENTO_S` antes de poder abonar otra vez, para no pagar doble. Si `ESCUDO_ABONO_AUTO` no es `on`, solo avisa cuánto habría que abonar.
+Si la salud baja de **125 %** (rojo, configurable con `ESCUDO_UMBRAL_ROJO_BP`), el Escudo calcula cuánto abonar para volver a **150 %** (o al umbral amarillo si es mayor) (`abonoParaSalud`), revisa que la reserva tenga ese USDC (`saldoUsdc`) y paga con `pagar` firmando con la reserva. Te manda el enlace de Stellar Expert. Después espera `ESCUDO_ENFRIAMIENTO_S` antes de poder abonar otra vez, para no pagar doble. Si `ESCUDO_ABONO_AUTO` no es `on`, solo avisa cuánto habría que abonar.
 
 ## Simular caída
 `/simular 25` muestra cómo quedaría la salud si el BTC cae 25 % (`saludTrasCaida`) y qué haría el Escudo. Es solo una simulación: no manda ninguna transacción. (El precio real lo controla el oráculo de Writz, por eso la caída se simula.)

@@ -5,8 +5,13 @@ import { MIN_BORROW_RATIO_BP } from "../writz/config.js";
 import type { Telegram } from "./telegram.js";
 import { EMOJI, porcentaje } from "./mensajes.js";
 
-export const OBJETIVO_BP = MIN_BORROW_RATIO_BP; // volver a 150 %
-export const UMBRAL_ROJO_BP = 12_500;
+import { leerUmbrales } from "./config.js";
+
+export const UMBRALES = leerUmbrales();
+/** Rojo configurable con ESCUDO_UMBRAL_ROJO_BP (por defecto 12500 = 125 %). */
+export const UMBRAL_ROJO_BP = UMBRALES.rojoBp;
+/** El abono lleva la salud al umbral amarillo (mínimo 150 %) para volver a verde. */
+export const OBJETIVO_BP = Math.max(MIN_BORROW_RATIO_BP, UMBRALES.amarilloBp);
 
 export type Decision =
   | { accion: "nada" }
@@ -25,7 +30,7 @@ export interface Situacion {
   enfriamientoMs: number;
 }
 
-/** Monto en stroops para volver a 150 %. 0 si no hace falta. */
+/** Monto en stroops para volver a OBJETIVO_BP (150 % por defecto). 0 si no hace falta. */
 export const montoAbono = (saludBp: number | null, deudaStroops: bigint) =>
   saludBp === null || deudaStroops <= 0n ? 0n : abonoParaSalud(saludBp, deudaStroops, OBJETIVO_BP);
 
@@ -87,7 +92,7 @@ export function crearAbonador(d: DepsAbono) {
         auto: d.auto && !sinLlaves, ultimoAbonoMs, ahoraMs: ahora(), enfriamientoMs: d.enfriamientoMs,
       });
       if (dec.accion === "solo_alerta")
-        await avisar(`🛡️ Para volver a 150 % hay que abonar ${stroopsAUsdc(dec.monto)} USDC.${sinLlaves ? " (Faltan RESERVA_PUBLIC/RESERVA_SECRET.)" : " Abono automático apagado (ESCUDO_ABONO_AUTO=on para activarlo)."}`, "alerta");
+        await avisar(`🛡️ Para volver a ${porcentaje(OBJETIVO_BP)} hay que abonar ${stroopsAUsdc(dec.monto)} USDC.${sinLlaves ? " (Faltan RESERVA_PUBLIC/RESERVA_SECRET.)" : " Abono automático apagado (ESCUDO_ABONO_AUTO=on para activarlo)."}`, "alerta");
       else if (dec.accion === "sin_reserva")
         await avisar(`⚠️ La reserva no alcanza: necesita ${stroopsAUsdc(dec.monto)} USDC y tiene ${stroopsAUsdc(dec.saldo)} USDC. Abonar a mano.`, "sin_reserva");
       else if (dec.accion === "abonar") {
@@ -95,7 +100,7 @@ export function crearAbonador(d: DepsAbono) {
         try {
           const r = await d.pagar(stroopsAUsdc(dec.monto), d.txid, { secret: d.reservaSecret! });
           ultimoAviso = "";
-          await avisar(`🛡️ Escudo abonó ${stroopsAUsdc(dec.monto)} USDC desde la reserva para volver a 150 %.\n${r.enlace}`, `abono:${r.hash}`);
+          await avisar(`🛡️ Escudo abonó ${stroopsAUsdc(dec.monto)} USDC desde la reserva para volver a ${porcentaje(OBJETIVO_BP)}.\n${r.enlace}`, `abono:${r.hash}`);
         } catch (e: any) {
           await avisar(`❌ El abono automático falló: ${e?.message ?? e}`, "fallo");
         }
@@ -113,7 +118,7 @@ export function textoSimulacion(p: Prestamo | null, caidaPct: number, auto: bool
   if (!p) return "No encontré el préstamo. Revisá LOAN_TXID.";
   if (p.saludBp === null) return "El préstamo no tiene deuda: una caída del BTC no lo pone en riesgo.";
   const h = saludTrasCaida(p.saludBp, caidaPct);
-  const nivel = semaforo(h);
+  const nivel = semaforo(h, UMBRALES);
   const lineas = [
     `🧪 Simulación: el BTC cae ${caidaPct} %`,
     `Salud: ${porcentaje(p.saludBp)} → ${porcentaje(h)} ${EMOJI[nivel]} (${nivel})`,
@@ -122,7 +127,7 @@ export function textoSimulacion(p: Prestamo | null, caidaPct: number, auto: bool
   if (h < UMBRAL_ROJO_BP) {
     const m = montoAbono(h, BigInt(p.deudaStroops));
     lineas.push(auto
-      ? `🛡️ El Escudo abonaría ${stroopsAUsdc(m)} USDC desde la reserva para volver a 150 %.`
+      ? `🛡️ El Escudo abonaría ${stroopsAUsdc(m)} USDC desde la reserva para volver a ${porcentaje(OBJETIVO_BP)}.`
       : `🛡️ El Escudo avisaría que hay que abonar ${stroopsAUsdc(m)} USDC (abono automático apagado).`);
   } else if (nivel === "amarillo") lineas.push("🛡️ El Escudo mandaría una alerta amarilla.");
   else lineas.push("🛡️ Todo bien, el Escudo no haría nada.");
