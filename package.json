@@ -11,7 +11,8 @@
     "depositar": "tsx scripts/depositar.ts",
     "prestar-pagar": "tsx scripts/prestar-pagar.ts",
     "escudo": "tsx escudo/index.ts",
-    "escudo:prueba": "tsx escudo/prueba.ts"
+    "escudo:prueba": "tsx escudo/prueba.ts",
+    "escudo:riesgo": "tsx escudo/riesgo-server.ts"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,8 @@
   "dependencies": {
     "@bitcoinerlab/secp256k1": "^2.0.0",
     "@stellar/stellar-sdk": "^16.4.1",
+    "@x402/core": "~2.28.0",
+    "@x402/stellar": "~2.28.0",
     "bitcoinjs-lib": "^7.0.4",
     "bitcoinjs-message": "^2.2.0",
     "dotenv": "^18.0.9",
