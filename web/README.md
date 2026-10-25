@@ -78,3 +78,17 @@ En `vite.config.ts` (no se tocó `writz/`):
 `web/tsconfig.app.json` tiene un `paths` hacia los tipos del SDK para que `tsc` resuelva el import desde `../writz`. La raíz no incluye `/web` (`include` solo tiene writz, scripts y tests), así que no hizo falta excluirla.
 
 Al arrancar, la app corre un chequeo local (sin red): ida y vuelta de un txid con `invertirHex`, el semáforo y que `leerPrestamo` sea una función. Si falla, se ve el error en vez de una pantalla en blanco.
+
+## Cambiar a colones (anchor de Stellar, SEP-24)
+
+En **Planilla** está la ventanilla "Cambiar a colones". Usa los estándares de Stellar:
+
+1. **SEP-1:** lee `https://<dominio>/.well-known/stellar.toml`.
+2. **SEP-10:** pide el challenge, revisa que venga del socio y sea para tu cuenta, lo firma Freighter y recibe el JWT.
+3. **SEP-24:** revisa `/info`, elige el activo (USDC si existe, si no SRT) y llama a `/transactions/withdraw/interactive`. Abre la ventanilla del socio en un popup y consulta `/transaction?id=` cada 5 s.
+
+Estados: conectando, esperando datos, en proceso, listo, o error en español sencillo. Si la cuenta no tiene trustline al activo del socio, aparece un botón para agregarla.
+
+- `VITE_ANCHOR_DOMAIN` cambia el socio (por defecto `testanchor.stellar.org`). En producción: MoneyGram u otro anchor con SINPE.
+- **Es una demo:** el socio de prueba usa su propio USDC/SRT clásico de testnet, no el USDC de Writz (contrato Soroban). No paga colones reales.
+- Código: `src/lib/anchor.ts`, `src/componentes/CambiarAColones.tsx`, pruebas en `src/lib/anchor.test.ts`.

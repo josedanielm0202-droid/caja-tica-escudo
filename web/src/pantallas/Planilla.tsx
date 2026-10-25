@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { saldoUsdc } from "../../../writz/client";
+import { CambiarAColones } from "../componentes/CambiarAColones";
 import { useBilletera } from "../billetera/useBilletera";
 import { textoColones, textoTipoCambio } from "../lib/formato";
 import { pagarUsdcTestnet } from "../lib/pagarUsdc";
@@ -110,6 +111,7 @@ export function Planilla() {
         cargando={enTestnet && saldoDeEsta === null}
         fallo={Boolean(saldoDeEsta && "fallo" in saldoDeEsta)}
       />
+      <CambiarAColones />
       <RetiroSimulado tasa={tasa} saldo={saldoConocido} />
     </div>
   );
