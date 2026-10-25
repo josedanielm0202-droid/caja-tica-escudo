@@ -1,0 +1,32 @@
+# Blueprint de Render para el Escudo (bot de Telegram + vigilante + abono automático).
+# Está en /escudo porque esa es la carpeta de Raúl. En Render: New > Blueprint y en
+# "Blueprint Path" poné escudo/render.yaml.
+# Las variables van con sync: false: Render las pide en el panel y nunca quedan en la repo.
+services:
+  - type: worker
+    name: escudo-caja-tica
+    runtime: node
+    plan: starter
+    numInstances: 1 # solo una copia: dos bots dan error 409 en getUpdates de Telegram
+    buildCommand: npm ci
+    startCommand: npm run escudo
+    autoDeploy: false
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: LOAN_TXID
+        sync: false
+      - key: RESERVA_PUBLIC
+        sync: false
+      - key: RESERVA_SECRET
+        sync: false
+      - key: ESCUDO_ABONO_AUTO
+        sync: false
+      - key: ESCUDO_INTERVALO_S
+        sync: false
+      - key: ESCUDO_ENFRIAMIENTO_S
+        sync: false
