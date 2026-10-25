@@ -7,7 +7,9 @@ import { defineConfig, loadEnv, type Plugin } from "vite";
 // paquete. Esos archivos sí están en @stellar/js-xdr/src. Sin este alias el
 // build del navegador no puede cargar writz/client.ts.
 const jsXdrSrc = new URL("./node_modules/@stellar/js-xdr/src/", import.meta.url);
-const bufferEntry = fileURLToPath(new URL("./node_modules/buffer/index.js", import.meta.url));
+// El paquete `buffer` es CJS. Importarlo por la ruta del archivo rompe el
+// `import { Buffer }` en `vite dev`. Este shim ESM sí tiene el export con nombre.
+const bufferShim = fileURLToPath(new URL("./src/lib/bufferNavegador.ts", import.meta.url));
 const sdkEntry = fileURLToPath(new URL("./node_modules/@stellar/stellar-sdk/lib/esm/index.js", import.meta.url));
 
 // writz/ está fuera de /web, así que Node no mira web/node_modules. Devolvemos
@@ -17,7 +19,6 @@ function resolverPaquetesWeb(): Plugin {
     name: "resolver-paquetes-web",
     enforce: "pre",
     resolveId(source) {
-      if (source === "buffer" || source === "buffer/") return bufferEntry;
       if (source === "@stellar/stellar-sdk") return sdkEntry;
       return null;
     },
@@ -55,7 +56,7 @@ function bufferParaWritzYXdr(): Plugin {
       if (code.includes("/* buffer-para-writz */")) return null;
       if (/import\s*\{[^}]*\bBuffer\b[^}]*\}\s*from\s*['"]buffer['"]/.test(code)) return null;
       return {
-        code: `import { Buffer } from ${JSON.stringify(bufferEntry)}; /* buffer-para-writz */\n${code}`,
+        code: `import { Buffer } from ${JSON.stringify(bufferShim)}; /* buffer-para-writz */\n${code}`,
         map: null,
       };
     },
@@ -73,7 +74,7 @@ export default defineConfig(({ mode }) => {
     // El SDK trae rutas rotas: que lo empaquete Vite (con los plugins de arriba)
     // y no el prebundle de esbuild, que no aplica resolveId igual.
     optimizeDeps: {
-      include: ["buffer"],
+      include: ["buffer", "base32.js"],
       exclude: ["@stellar/stellar-sdk"],
     },
     server: {
