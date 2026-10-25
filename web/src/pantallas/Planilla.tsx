@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { saldoUsdc } from "../../../writz/client";
 import { useBilletera } from "../billetera/useBilletera";
-import { textoColones, textoTipoCambio, textoUsdc } from "../lib/formato";
+import { textoColones, textoTipoCambio } from "../lib/formato";
 import { pagarUsdcTestnet } from "../lib/pagarUsdc";
 import {
   colonesDeStroops,
@@ -13,6 +13,7 @@ import {
   tipoCambioEjemplo,
   totalesPlanilla,
   TOPE_LINEAS,
+  usdcVisible,
   validarLinea,
   type LineaPlanilla,
   type MonedaLinea,
@@ -95,7 +96,7 @@ export function Planilla() {
       <dl className="datos">
         <div>
           <dt>Total en USDC</dt>
-          <dd>{textoUsdc(totales.stroops)}</dd>
+          <dd>{usdcVisible(totales.stroops)} USDC</dd>
         </div>
         <div>
           <dt>Total en colones, de ejemplo</dt>
@@ -245,7 +246,7 @@ function Linea({
       <p className="kicker">{linea.moneda === "crc" ? "Colones" : "USDC"}</p>
       <h2>{linea.nombre}</h2>
       <p>
-        {textoUsdc(stroops)}
+        {usdcVisible(stroops)} USDC
         {linea.moneda === "crc" ? ` · ${textoColones(Number(linea.monto.replace(",", ".")))} al tipo de ejemplo` : ""}
       </p>
       {linea.destino ? <p className="mono suave">{linea.destino}</p> : null}
@@ -304,13 +305,13 @@ function Comparacion({
   if (comparacion === "alcanza") {
     return (
       <p className="ok" role="status">
-        Te alcanza: tenés {textoUsdc(saldo ?? 0n)} y la planilla suma {textoUsdc(totales)}.
+        Te alcanza: tenés {usdcVisible(saldo ?? 0n)} USDC y la planilla suma {usdcVisible(totales)} USDC.
       </p>
     );
   }
   return (
     <p className="error" role="status">
-      Te faltan {textoUsdc(totales - (saldo ?? 0n))}. Tenés {textoUsdc(saldo ?? 0n)} y la planilla suma {textoUsdc(totales)}.
+      Te faltan {usdcVisible(totales - (saldo ?? 0n))} USDC. Tenés {usdcVisible(saldo ?? 0n)} USDC y la planilla suma {usdcVisible(totales)} USDC.
     </p>
   );
 }
@@ -374,7 +375,7 @@ function RetiroSimulado({ tasa, saldo }: { tasa: number; saldo: bigint | null })
       {paso === "confirmar" ? (
         <>
           <p>
-            {textoUsdc(stroops)} se verían como {textoColones(colonesDeStroops(stroops, tasa))}.
+            {usdcVisible(stroops)} USDC se verían como {textoColones(colonesDeStroops(stroops, tasa))}.
           </p>
           {saldo === null ? (
             <p className="suave">No hay una cuenta conectada. La simulación sigue igual.</p>
@@ -408,7 +409,7 @@ function RetiroSimulado({ tasa, saldo }: { tasa: number; saldo: bigint | null })
             Referencia <strong>{referencia}</strong>
           </p>
           <p>
-            {textoUsdc(stroops)} quedarían en {textoColones(colonesDeStroops(stroops, tasa))}. No salió plata de tu
+            {usdcVisible(stroops)} USDC quedarían en {textoColones(colonesDeStroops(stroops, tasa))}. No salió plata de tu
             cuenta ni de un banco. Esta referencia no existe en Stellar.
           </p>
           <button

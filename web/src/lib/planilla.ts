@@ -126,6 +126,12 @@ export function guardarLineas(almacen: Pick<Storage, "setItem"> | null, lineas: 
   }
 }
 
+/** USDC de la planilla, a 2 decimales. El colón no cae justo en un stroop. */
+export function usdcVisible(stroops: bigint): string {
+  const n = Number(stroops) / 1e7;
+  return n.toLocaleString("es-CR", { maximumFractionDigits: 2 });
+}
+
 export function colonesDeStroops(stroops: bigint, colonesPorUsdc: number): number {
   return (Number(stroops) / 1e7) * colonesPorUsdc;
 }

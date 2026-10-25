@@ -6,6 +6,7 @@ import {
   referenciaSimulada,
   tipoCambioEjemplo,
   totalesPlanilla,
+  usdcVisible,
   validarLinea,
   type LineaPlanilla,
 } from "./planilla";
@@ -23,6 +24,8 @@ describe("totales de la planilla", () => {
     );
     expect(totales.stroops).toBe(200_000_000n);
     expect(totales.colones).toBeCloseTo(10_248, 5);
+    expect(usdcVisible(totales.stroops)).toBe("20");
+    expect(usdcVisible(305_240_0468n)).toBe("305,24");
   });
 
   it("acepta coma decimal y una línea vacía da cero", () => {
