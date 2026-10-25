@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useBilletera } from "../billetera/useBilletera";
 import { useTitulo } from "../lib/titulo";
 
@@ -32,6 +32,8 @@ const PASOS = [
 export function Inicio() {
   useTitulo("Inicio");
   const billetera = useBilletera();
+  const [params] = useSearchParams();
+  const search = params.toString();
   const ocupado = billetera.fase === "revisando" || billetera.fase === "conectando";
   return (
     <div className="pagina">
@@ -52,10 +54,10 @@ export function Inicio() {
             {billetera.fase === "conectando" ? "Conectando…" : "Conectar billetera"}
           </button>
         )}
-        <Link className={billetera.conectada ? "boton" : "boton boton--secundario"} to="/panel">
+        <Link className={billetera.conectada ? "boton" : "boton boton--secundario"} to={{ pathname: "/panel", search }}>
           Mirá el panel
         </Link>
-        <Link className="boton boton--secundario" to="/prestamo">
+        <Link className="boton boton--secundario" to={{ pathname: "/prestamo", search }}>
           Ver el límite
         </Link>
       </div>

@@ -14,6 +14,16 @@ export function textoUsdc(stroops: bigint): string {
   return `${agrupar(stroopsAUsdc(stroops))} USDC`;
 }
 
+export function textoSats(sats: bigint): string {
+  return `${sats.toLocaleString("es-CR")} sats`;
+}
+
+export function etiquetaEstado(estado: "Active" | "Closed" | "Liquidated"): string {
+  if (estado === "Active") return "Activo (Active)";
+  if (estado === "Closed") return "Cerrado (Closed)";
+  return "Liquidado (Liquidated)";
+}
+
 export function textoBtc(sats: bigint): string {
   const entero = sats / 100_000_000n;
   const frac = (sats % 100_000_000n).toString().padStart(8, "0").replace(/0+$/, "");

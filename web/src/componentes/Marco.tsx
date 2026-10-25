@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useSearchParams } from "react-router-dom";
 import { BotonBilletera, EstadoBilletera } from "./BilleteraUi";
 import { Fondo } from "./Fondo";
 import { PieLegal } from "./PieLegal";
@@ -12,6 +12,8 @@ const ENLACES = [
 ] as const;
 
 export function Marco() {
+  const [params] = useSearchParams();
+  const search = params.toString();
   return (
     <div className="cuerpo">
       <Fondo />
@@ -19,7 +21,7 @@ export function Marco() {
         Saltar al contenido
       </a>
       <header className="barra vidrio">
-        <NavLink to="/" className="marca" end>
+        <NavLink to={{ pathname: "/", search }} className="marca" end>
           <Escudo />
           <span>
             <strong>Caja Tica</strong>
@@ -28,7 +30,7 @@ export function Marco() {
         </NavLink>
         <nav className="nav-escritorio" aria-label="Principal">
           {ENLACES.map((enlace) => (
-            <NavLink key={enlace.to} to={enlace.to} end={enlace.fin}>
+            <NavLink key={enlace.to} to={{ pathname: enlace.to, search }} end={enlace.fin}>
               {enlace.label}
             </NavLink>
           ))}
@@ -45,7 +47,7 @@ export function Marco() {
       <PieLegal />
       <nav className="nav-movil vidrio" aria-label="Principal">
         {ENLACES.map((enlace) => (
-          <NavLink key={enlace.to} to={enlace.to} end={enlace.fin}>
+          <NavLink key={enlace.to} to={{ pathname: enlace.to, search }} end={enlace.fin}>
             <enlace.icono />
             <span>{enlace.label}</span>
           </NavLink>
