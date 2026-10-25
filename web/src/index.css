@@ -223,6 +223,49 @@ code { font-size: 0.92em; }
   background: var(--oro);
 }
 
+.sello-simulado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: #f0b14a;
+  color: #1c1408;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.pasos-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pasos-mini li {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--suave);
+  font-size: 0.85rem;
+}
+
+.pasos-mini li[aria-current="step"] {
+  background: var(--oro);
+  border-color: var(--oro);
+  color: var(--oro-tinta);
+  font-weight: 700;
+}
+
 .nav-escritorio { display: none; }
 
 .contenido {
@@ -346,7 +389,8 @@ code { font-size: 0.92em; }
 
 input[type="text"],
 input:not([type]),
-.campo input {
+.campo input,
+.campo select {
   min-height: 48px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.38);

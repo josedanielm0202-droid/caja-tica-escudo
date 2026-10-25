@@ -56,3 +56,9 @@ export function textoUsd(stroops: bigint): string {
 export function textoColones(monto: number): string {
   return monto.toLocaleString("es-CR", { style: "currency", currency: "CRC", maximumFractionDigits: 0 });
 }
+
+/** Tipo de cambio de ejemplo, con el decimal visible. No es la tasa del mercado. */
+export function textoTipoCambio(colonesPorUsdc: number): string {
+  const texto = colonesPorUsdc.toLocaleString("es-CR", { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+  return `₡${texto} por USDC`;
+}
