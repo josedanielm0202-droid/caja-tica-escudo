@@ -20,6 +20,10 @@ El Escudo es un bot de Telegram que cuida tu préstamo de Writz. Te dice cómo e
 | `ESCUDO_ABONO_AUTO` | Escribí exactamente `on` para que abone solo. Cualquier otra cosa = solo avisa |
 | `ESCUDO_ENFRIAMIENTO_S` | Segundos mínimos entre dos abonos automáticos (vacío = 600) |
 | `RESERVA_PUBLIC` / `RESERVA_SECRET` | Cuenta de reserva USDC del Escudo (la da José, nunca en la repo) |
+| `X402_PAY_TO` | Cuenta G... que recibe los pagos de la consulta de riesgo (solo para `escudo:riesgo`) |
+| `X402_PRECIO` | Precio por consulta en USDC (vacío = `$0.01`) |
+| `X402_FACILITATOR_URL` | Facilitador x402 (vacío = `https://x402.org/facilitator`) |
+| `PORT` | Puerto del servidor de riesgo (vacío = 4020) |
 
 Copiá `.env.example` a `.env` y llenalas.
 
@@ -43,8 +47,27 @@ Si la salud baja de **125 %** (rojo), el Escudo calcula cuánto abonar para volv
 ## Simular caída
 `/simular 25` muestra cómo quedaría la salud si el BTC cae 25 % (`saludTrasCaida`) y qué haría el Escudo. Es solo una simulación: no manda ninguna transacción. (El precio real lo controla el oráculo de Writz, por eso la caída se simula.)
 
+## Consulta de riesgo pagada (x402)
+Un servidor HTTP pequeño que vende la consulta de riesgo de un préstamo, pagada por uso con [x402](https://x402.org) en Stellar testnet (USDC de prueba, esquema `exact` con `ExactStellarScheme`).
+
+```bash
+npm run escudo:riesgo   # escucha en http://localhost:4020
+```
+
+`GET /riesgo/:txid` (txid de 64 caracteres hex):
+1. Sin pago responde **402** con el encabezado `PAYMENT-REQUIRED` (qué se cobra, a quién y en qué red).
+2. El cliente firma el pago y repite la consulta con el encabezado `PAYMENT-SIGNATURE`.
+3. El facilitador revisa el pago. Si el préstamo existe, se cobra y responde **200** con el encabezado `PAYMENT-RESPONSE` (hash del pago) y este JSON:
+
+```json
+{ "txid": "ab…", "saludBp": 14000, "saludPct": "140.00 %", "semaforo": "amarillo",
+  "precioLiquidacionUsdc": "60000", "deudaUsdc": "50000", "estado": "Active" }
+```
+
+`precioLiquidacionUsdc` es el precio del BTC (USDC por 1 BTC) al que se liquidaría (`precioLiquidacion`). Si el préstamo no existe responde 404 y **no cobra**. Un cliente de prueba se puede hacer con `@x402/fetch` + `@x402/stellar/exact/client`.
+
 ## Publicarlo (después)
 Para que corra siempre, se puede subir a **Render** o **Railway** como "worker" (no necesita puerto) con el comando `npm run escudo` y las variables de arriba en su panel. Solo una copia del bot a la vez (si no, Telegram da error 409 en `getUpdates`).
 
 ## Pruebas
-`npm test` corre las pruebas en `tests/escudo-*.test.ts` sin red (Telegram y Writz simulados).
+`npm test` corre las pruebas en `tests/escudo-*.test.ts` sin red (Telegram, Writz y el facilitador x402 simulados).
