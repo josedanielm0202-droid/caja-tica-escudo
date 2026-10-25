@@ -23,10 +23,10 @@ export function stroopsAUsdc(v: bigint): string {
 export type Semaforo = "verde" | "amarillo" | "rojo";
 
 /** Color del medidor del panel (boceto): verde >= 150 %, amarillo 125–150 %, rojo < 125 %. */
-export function semaforo(healthBp: number | null): Semaforo {
+export function semaforo(healthBp: number | null, u: { rojoBp: number; amarilloBp: number } = { rojoBp: 12_500, amarilloBp: MIN_BORROW_RATIO_BP }): Semaforo {
   if (healthBp === null) return "verde"; // sin deuda
-  if (healthBp >= MIN_BORROW_RATIO_BP) return "verde";
-  if (healthBp >= 12_500) return "amarillo";
+  if (healthBp >= u.amarilloBp) return "verde";
+  if (healthBp >= u.rojoBp) return "amarillo";
   return "rojo";
 }
 

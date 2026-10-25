@@ -30,3 +30,7 @@ services:
         sync: false
       - key: ESCUDO_ENFRIAMIENTO_S
         sync: false
+      - key: ESCUDO_UMBRAL_ROJO_BP
+        sync: false
+      - key: ESCUDO_UMBRAL_AMARILLO_BP
+        sync: false
