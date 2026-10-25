@@ -31,6 +31,7 @@ Copiá `.env.example` a `.env` si ocupás cambiar la ruta base. No subas `.env`:
 | Variable | Uso |
 |---|---|
 | `VITE_BASE_PATH` | `/` en Vercel. En GitHub Pages, `/caja-tica-escudo/` (con barra al final). |
+| `VITE_TXID_DEMO` | Txid interno del préstamo, el mismo que `LOAN_TXID`. Vacío = datos de ejemplo. En la app también vale `?txid=`. |
 
 ## Publicar
 
@@ -46,7 +47,11 @@ La web no llama contratos directo. Importa `../writz` (`units.ts`, `config.ts` y
 - Salud: basis points (`15000` = 150 %). `null` = sin deuda.
 - Semáforo (`semaforo` en `writz/units.ts`): verde ≥ 150 %, amarillo 125–150 %, rojo &lt; 125 %. Bajo 120 % hay riesgo de liquidación.
 
-Los números del panel son un ejemplo. La billetera es Freighter: el botón «Conectar billetera» pide la cuenta pública y, si Freighter ya autorizó el sitio, al recargar se vuelve a leer con `getAddress`. No se guarda la llave en el navegador. El firmante solo existe en testnet (`WRITZ.networkPassphrase`) y llama a `signTransaction` de `@stellar/freighter-api`. El saldo usa `saldoUsdc` de `writz/client.ts`.
+El panel lee el préstamo con `leerPrestamo` si hay txid (`VITE_TXID_DEMO`, `?txid=` o el campo del Panel). Sin txid, o con `?ejemplo=1`, muestra datos de ejemplo bien marcados. La lectura se repite cada 30 segundos. Si `enRiesgo` es verdadero, aparece el aviso del Escudo.
+
+Pedir préstamo deja el control en 66 % de LTV (`MAX_LTV_BP`). El monto sale de `maximoPrestable`, y al lado se ve el precio de liquidación y la salud que quedaría. El botón llama a `pedirPrestamo` solo con Freighter en testnet y un txid cargado; si no, queda apagado y dice por qué. `pedirPrestamo` recibe el USDC legible: el cliente lo pasa a stroops.
+
+La billetera es Freighter: el botón «Conectar billetera» pide la cuenta pública y, si Freighter ya autorizó el sitio, al recargar se vuelve a leer con `getAddress`. No se guarda la llave en el navegador. El firmante solo existe en testnet (`WRITZ.networkPassphrase`) y llama a `signTransaction` de `@stellar/freighter-api`. El saldo usa `saldoUsdc` de `writz/client.ts`.
 
 Otra billetera puede implementar `PasaporteBilletera` en `src/billetera/tipos.ts`. Hoy solo está Freighter.
 
