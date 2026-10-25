@@ -2,12 +2,14 @@
 import type { Prestamo } from "../writz/client.js";
 import type { Telegram } from "./telegram.js";
 import { AYUDA, textoEstado } from "./mensajes.js";
+import { leerPorcentaje, textoSimulacion } from "./abono.js";
 
 export interface DepsBot {
   telegram: Telegram;
   leerPrestamo: (txid: string) => Promise<Prestamo | null>;
   txid: string;
   chatId?: string; // si viene, solo responde a ese chat
+  abonoAuto?: boolean; // para explicar qué haría el Escudo en /simular
 }
 
 /** Respuesta a un comando, o null si no aplica. */
@@ -20,6 +22,12 @@ export async function responder(texto: string, d: DepsBot): Promise<string | nul
     } catch (e: any) {
       return `No pude leer el préstamo: ${e?.message ?? e}`;
     }
+  }
+  if (cmd === "/simular") {
+    const pct = leerPorcentaje(texto);
+    if (pct === null) return "Uso: /simular <porcentaje de caída del BTC>, ej. /simular 25";
+    try { return textoSimulacion(await d.leerPrestamo(d.txid), pct, !!d.abonoAuto); }
+    catch (e: any) { return `No pude leer el préstamo: ${e?.message ?? e}`; }
   }
   if (cmd === "/ayuda" || cmd === "/help") return AYUDA;
   return null;

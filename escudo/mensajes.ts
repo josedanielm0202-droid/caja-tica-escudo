@@ -18,4 +18,4 @@ export function textoEstado(p: Prestamo | null): string {
   ].filter(Boolean).join("\n");
 }
 
-export const AYUDA = "Comandos:\n/estado — salud y deuda del préstamo";
+export const AYUDA = "Comandos:\n/estado — salud y deuda del préstamo\n/simular <porcentaje> — qué pasaría si el BTC cae ese %";
