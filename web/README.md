@@ -2,7 +2,9 @@
 
 Pantallas del demo: Inicio, Panel, Pedir préstamo, Planilla y Historial. El texto está en español de Costa Rica (voseo).
 
-El estilo de estas pantallas es **neutro a propósito**. Las dos propuestas visuales (vidrio líquido, modo oscuro) están en [`mockups/`](mockups/) y no forman parte de la app hasta que Juliana elija una.
+El estilo de la app es la dirección A: vidrio líquido, modo oscuro, degradado de azul a naranja. Las maquetas A y B siguen en [`mockups/`](mockups/) como referencia; no las carga Vite.
+
+En el teléfono el vidrio es un relleno oscuro (el texto tiene que leerse igual si el navegador no desenfoque). El `backdrop-filter` de 12px solo entra desde 900px de ancho. Las manchas del fondo no se desenfocan, y con `prefers-reduced-motion` dejan de flotar.
 
 ## Correr
 
