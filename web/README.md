@@ -36,9 +36,7 @@ Copiá `.env.example` a `.env` si ocupás cambiar la ruta base. No subas `.env`:
 
 ## Publicar
 
-**Vercel:** Root Directory `web`, framework Vite, build `npm run build`, output `dist`. Dejá `VITE_BASE_PATH=/`.
-
-**GitHub Pages:** compilá con `VITE_BASE_PATH=/caja-tica-escudo/` y publicá el contenido de `web/dist`. El `404.html` deja funcionar el router al recargar.
+Los pasos están en [DEPLOY.md](DEPLOY.md). En Vercel: Root Directory `web`, Vite, `npm run build`, salida `dist`, `VITE_BASE_PATH=/` (o sin definirla). En GitHub Pages: `VITE_BASE_PATH=/caja-tica-escudo/` y el `404.html` que copia el build.
 
 ## Módulo Writz
 
