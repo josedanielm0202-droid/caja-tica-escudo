@@ -15,9 +15,20 @@ import {
   type SimulacionLtv,
 } from "../lib/calculoPrestamo";
 import { etiquetaEstado, textoBtc, textoLtv, textoSalud, textoUsd, textoUsdc } from "../lib/formato";
+import { guardarMovimientoSesion } from "../lib/sesionMovimientos";
 import { useLecturaPrestamo } from "../lib/useLecturaPrestamo";
 import { useTxidActivo } from "../lib/useTxidActivo";
 import { useTitulo } from "../lib/titulo";
+
+function recordarPrestamo(respuesta: ResultadoTx) {
+  guardarMovimientoSesion(localStorage, {
+    hash: respuesta.hash,
+    enlace: respuesta.enlace,
+    tipo: "prestamo",
+    titulo: "USDC pedido",
+    cuando: Date.now(),
+  });
+}
 
 export function PedirPrestamo() {
   useTitulo("Pedir préstamo");
@@ -65,6 +76,7 @@ export function PedirPrestamo() {
       const monto = stroopsAUsdc(simulacion.montoStroops);
       const respuesta = await pedirPrestamo(monto, real.txid, billetera.firmante);
       setResultado(respuesta);
+      recordarPrestamo(respuesta);
       lectura.releer();
     } catch (causa) {
       const texto = causa instanceof Error ? causa.message : "No se pudo pedir el préstamo.";

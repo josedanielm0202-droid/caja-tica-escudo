@@ -32,6 +32,7 @@ Copiá `.env.example` a `.env` si ocupás cambiar la ruta base. No subas `.env`:
 |---|---|
 | `VITE_BASE_PATH` | `/` en Vercel. En GitHub Pages, `/caja-tica-escudo/` (con barra al final). |
 | `VITE_TXID_DEMO` | Txid interno del préstamo, el mismo que `LOAN_TXID`. Vacío = datos de ejemplo. En la app también vale `?txid=`. |
+| `VITE_TIPO_CAMBIO_EJEMPLO` | Colones por 1 USDC, solo para la planilla y el retiro simulado. Por defecto `512.4`. No es la tasa del mercado. |
 
 ## Publicar
 
@@ -50,6 +51,10 @@ La web no llama contratos directo. Importa `../writz` (`units.ts`, `config.ts` y
 El panel lee el préstamo con `leerPrestamo` si hay txid (`VITE_TXID_DEMO`, `?txid=` o el campo del Panel). Sin txid, o con `?ejemplo=1`, muestra datos de ejemplo bien marcados. La lectura se repite cada 30 segundos. Si `enRiesgo` es verdadero, aparece el aviso del Escudo.
 
 Pedir préstamo deja el control en 66 % de LTV (`MAX_LTV_BP`). El monto sale de `maximoPrestable`, y al lado se ve el precio de liquidación y la salud que quedaría. El botón llama a `pedirPrestamo` solo con Freighter en testnet y un txid cargado; si no, queda apagado y dice por qué. `pedirPrestamo` recibe el USDC legible: el cliente lo pasa a stroops.
+
+La planilla guarda a quién le pagarías (nombre y monto en colones o USDC) solo en `localStorage`. El total se muestra en USDC y en colones con `VITE_TIPO_CAMBIO_EJEMPLO`, marcado como tipo de cambio de ejemplo, y se compara con el `saldoUsdc` de la cuenta conectada en testnet. El retiro a colones es una simulación: monto, confirmar y un recibo con referencia `SIM-######`. El sello dice «Simulado: no mueve dinero real» y no llama a ningún off-ramp. Si la línea está en USDC y tiene una cuenta `G…`, el botón «Pagar USDC en testnet» usa `enviar` con el firmante de Freighter sobre el contrato USDC. Eso sí mueve USDC de prueba y deja el enlace de Stellar Expert. No convierte a colones.
+
+El historial junta tres listas. Las transacciones del demo salen de `docs/transacciones.md` (se empaquetan al compilar). Lo que pediste o pagaste en esta sesión queda en `localStorage` con hash y enlace. El feed en vivo lee las operaciones de la cuenta conectada, o de la cuenta del demo si no hay billetera, en Horizon testnet cada 15 segundos. Muestra el tiempo relativo, el tipo (préstamo, pago, depósito, liquidación u otro) y el enlace a Stellar Expert. Si Horizon falla, se ve el error y se conserva la última lectura.
 
 La billetera es Freighter: el botón «Conectar billetera» pide la cuenta pública y, si Freighter ya autorizó el sitio, al recargar se vuelve a leer con `getAddress`. No se guarda la llave en el navegador. El firmante solo existe en testnet (`WRITZ.networkPassphrase`) y llama a `signTransaction` de `@stellar/freighter-api`. El saldo usa `saldoUsdc` de `writz/client.ts`.
 
