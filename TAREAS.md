@@ -1,4 +1,4 @@
-# Tareas: presupuesto con tope para agentes de IA
+# Tareas de QuickChain: presupuesto con tope para agentes de IA
 
 Divididas **por funcionalidad, no por persona**. Cualquiera agarra cualquiera: comentá "la agarro" en su issue. Entrega en APEX: **lunes 26-10-2026 antes de las 11:30 a.m. (hora CR)**. Todos los miembros deben tener commits.
 

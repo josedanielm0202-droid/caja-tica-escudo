@@ -1,8 +1,8 @@
-# Presupuesto con tope para agentes de IA (Stellar + x402)
+# QuickChain: presupuesto con tope para agentes de IA (Stellar + x402)
 
 > Firmás una vez al mes un tope en USDC. Tu agente de IA paga APIs x402 en Stellar solo, sin pedirte firma en cada llamada, y nunca gasta más del tope.
 
-_Pura Vida Ideathon | Build on Stellar (entrega en APEX). Prototipo en testnet. El proyecto todavía no tiene nombre: lo llamamos «el proyecto»._
+_Pura Vida Ideathon | Build on Stellar (entrega en APEX). Prototipo en testnet._
 
 **Video (3 min pitch + 2 min demo):** TODO
 
@@ -39,7 +39,7 @@ sequenceDiagram
 ```
 
 ## Quién paga y cuánto
-- **El dueño del agente** paga **1% de lo que el agente gasta** por el presupuesto.
+- **El dueño del agente** paga a QuickChain **1% de lo que el agente gasta** por el presupuesto.
 - **Sin mensualidad.** Si el agente no gasta, no pagás nada.
 
 ## Por qué sirve a los dos lados
